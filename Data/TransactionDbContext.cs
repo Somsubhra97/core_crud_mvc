@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace jQuery_Ajax_CRUD.Models
+namespace core_crud_mvc.Models
 {
     public class TransactionDbContext:DbContext
     {

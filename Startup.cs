@@ -10,6 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using core_crud_mvc.Repository;
+using core_crud_mvc.Interfaces;
+
 namespace core_crud_mvc
 {
     public class Startup
@@ -25,9 +28,9 @@ namespace core_crud_mvc
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-
-            services.AddDbContext<TransactionDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
+            options.UseSqlServer(Configuration.GetConnectionString("DevConnection"));
+            services.AddTransient<IUnitOfWork, UnitOfWork>();                   
+                                   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,7 +42,7 @@ namespace core_crud_mvc
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Transaction/Error");
             }
             app.UseStaticFiles();
 

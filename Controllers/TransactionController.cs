@@ -5,16 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+
 using core_crud_mvc.Models;
+using core_crud_mvc.Repository;
 
 
 namespace core_crud_mvc.Controllers
 {
     public class TransactionController : Controller
     {
-        private readonly TransactionDbContext _context;
+        private readonly IUnitOfWork _context;
 
-        public TransactionController(TransactionDbContext context)
+        public TransactionController(IUnitOfWork context)
         {
             _context = context;
         }
@@ -22,7 +24,7 @@ namespace core_crud_mvc.Controllers
         
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Transactions.ToListAsync());
+            return View(await _context.Repo.GetAll());
         }
 
                
@@ -32,7 +34,7 @@ namespace core_crud_mvc.Controllers
                 return View(new TransactionModel());
             else
             {
-                var transactionModel = await _context.Transactions.FindAsync(id);
+                var transactionModel = await _context.Repo.GetById(id);
                 if (transactionModel == null)
                 {
                     return NotFound();
@@ -50,25 +52,15 @@ namespace core_crud_mvc.Controllers
                 if (id == 0)
                 {
                     transactionModel.Date = DateTime.Now;
-                    _context.Add(transactionModel);
-                    await _context.SaveChangesAsync();
+                    _context.Repo.Add(transactionModel);  
+                    _context.Save();                 
 
                 }
                 //Update
                 else
                 {
-                    try
-                    {
-                        _context.Update(transactionModel);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!TransactionModelExists(transactionModel.TransactionId))
-                        { return NotFound(); }
-                        else
-                        { throw; }
-                    }
+                    _context.Repo.Update(transactionModel); 
+                    _context.Save();  
                 }
                 return RedirectToAction(nameof(GetAllEmployees));
             }
@@ -79,7 +71,7 @@ namespace core_crud_mvc.Controllers
 
         	return View();
         } 
-        
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -87,8 +79,7 @@ namespace core_crud_mvc.Controllers
                 return NotFound();
             }
 
-            var transactionModel = await _context.Transactions
-                .FirstOrDefaultAsync(m => m.TransactionId == id);
+            var transactionModel = await _context.Repo.GetById(id);
             if (transactionModel == null)
             {
                 return NotFound();
@@ -102,15 +93,11 @@ namespace core_crud_mvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var transactionModel = await _context.Transactions.FindAsync(id);
-            _context.Transactions.Remove(transactionModel);
-            await _context.SaveChangesAsync();
-            return Json(new { html = Helper.RenderRazorViewToString(this, "_ViewAll", _context.Transactions.ToList()) });
+            var transactionModel = await _context.Repo.GetById(id);
+            _context.Delete(transactionModel);  
+            _context.Save();          
+            return RedirectToAction(nameof(Index))
         }
-
-        private bool TransactionModelExists(int id)
-        {
-            return _context.Transactions.Any(e => e.TransactionId == id);
-        }
+        
     }
 }
