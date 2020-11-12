@@ -31,7 +31,7 @@ namespace core_crud_mvc.Repository
            db.Transactions.Update(x);           
         }
 
-       public async Task DeleteEmployee(int? Id){    
+       public async Task Delete(int? Id){    
             var x = await db.Transactions.FirstOrDefaultAsync(x => x.ID == Id);
             if (x != null)                      
                 db.Transactions.Remove(x);
