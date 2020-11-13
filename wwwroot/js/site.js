@@ -19,6 +19,7 @@ jQueryAjaxPost = form => {
             contentType: false,
             processData: false,
             success: function (res) {
+                $('#form-modal').modal('hide');
                 window.location.replace('/');
             },
             error: function (err) {
@@ -41,8 +42,8 @@ jQueryAjaxDelete = form => {
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    $('#form-modal').modal('hide');
-                    window.location.replace('/');
+
+                    $('#view-all').html(res.html);
                 },
                 error: function (err) {
                     console.log(err)
