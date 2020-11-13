@@ -1,4 +1,3 @@
-﻿
 showInPopup = (url, title) => {
     $.ajax({
         type: 'GET',
@@ -7,11 +6,7 @@ showInPopup = (url, title) => {
             $('#form-modal .modal-body').html(res);
             $('#form-modal .modal-title').html(title);
             $('#form-modal').modal('show');
-            // to make popup draggable
-            $('.modal-dialog').draggable({
-                handle: ".modal-header"
-            });
-        }
+           }
     })
 }
 
@@ -24,21 +19,13 @@ jQueryAjaxPost = form => {
             contentType: false,
             processData: false,
             success: function (res) {
-                if (res.isValid) {
-                    $('#view-all').html(res.html)
-                    $('#form-modal .modal-body').html('');
-                    $('#form-modal .modal-title').html('');
-                    $('#form-modal').modal('hide');
-                }
-                else
-                    $('#form-modal .modal-body').html(res.html);
+                window.location.replace('/');
             },
             error: function (err) {
                 console.log(err)
             }
         })
-        //to prevent default form submit event
-        return false;
+
     } catch (ex) {
         console.log(ex)
     }
@@ -54,7 +41,8 @@ jQueryAjaxDelete = form => {
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    $('#view-all').html(res.html);
+                    $('#form-modal').modal('hide');
+                    window.location.replace('/');
                 },
                 error: function (err) {
                     console.log(err)
