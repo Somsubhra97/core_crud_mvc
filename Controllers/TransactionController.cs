@@ -74,23 +74,7 @@ namespace core_crud_mvc.Controllers
         public async Task<IActionResult> Details(int id){
         	var x=await _context.Repo.GetById(id);
         	return View(x);
-        }
-        
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var transactionModel = await _context.Repo.GetById(id);
-            if (transactionModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(transactionModel);
-        }
+        }      
 
         
         [HttpPost, ActionName("Delete")]
