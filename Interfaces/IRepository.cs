@@ -1,5 +1,5 @@
-using CoreServices.Models;
-using CoreServices.ViewModel;
+using core_mvc_crud.Models;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +9,10 @@ namespace core_mvc_crud.Repository
 {
     public interface IRepository
     {
-        Task<List<Category>> GetCategories();
-
-        Task<List<PostViewModel>> GetPosts();
-
-        Task<PostViewModel> GetPost(int? postId);
-
-        Task<List<PostViewModel>> GetPostsByCategory(int id);
-        
-        Task<CategoryViewModel> GetCatViewModel(int id);
-
-        Task<int> AddPost(Post post);
-
-        Task<int> DeletePost(int? postId);
-
-        Task UpdatePost(Post post);
+        Task<List<TransactionModel>> GetAll();
+        Task<TransactionModel> GetById(int id);
+        Task Add(TransactionModel x);
+        Task Update(TransactionModel x);
+        Task Delete(int id);
     }
 }
