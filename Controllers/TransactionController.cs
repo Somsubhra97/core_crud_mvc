@@ -15,7 +15,6 @@ namespace core_crud_mvc.Controllers
     public class TransactionController : Controller
     {
         private readonly IUnitOfWork _context;
-
         public TransactionController(IUnitOfWork context)
         {
             _context = context;
@@ -71,7 +70,12 @@ namespace core_crud_mvc.Controllers
 
         	return View();
         } 
-
+        
+        public async Task<IActionResult> Details(int id){
+        	var x=await _context.Repo.GetById(id);
+        	return View(x);
+        }
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

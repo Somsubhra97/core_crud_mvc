@@ -49,11 +49,14 @@
 
                                 </a>
 
+                                 <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-outline-primary"><i class="fa fa-marker fa-lg"></i>Details
+                                 </a>
+
                                 <form asp-action="Delete" asp-route-id="@item.TransactionId" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
                                     <input type="hidden" asp-for="@item.TransactionId" />
                                     <input type="submit" value="Delete" class="btn btn-danger" />
                                 </form>
-                                
+
                             </div>
                         </td>
                     </tr>
